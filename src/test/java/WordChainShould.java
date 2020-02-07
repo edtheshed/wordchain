@@ -1,41 +1,35 @@
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 public class WordChainShould {
 
-    @Test
-    void change_one_letter_of_start_word_to_a_letter_in_end_word() {
-        String start = "cat";
-        String end = "dog";
-        char[] endChars = end.toCharArray();
+    private String start;
+    private String end;
+    private WordChain wordChain;
 
-        WordChainGame game = new WordChainGame(start, end);
-
-        game.next();
-
-        char[] progressChars = game.getProgress().toCharArray();
-
-        int matchingLetter = 0;
-
-        for (int letterIndex = 0; letterIndex < end.length(); letterIndex++) {
-            if(progressChars[letterIndex] == endChars[letterIndex])
-                matchingLetter++;
-        }
-
-        assertTrue(matchingLetter == 1);
+    @BeforeEach
+    void setUp() {
+        start = "cat";
+        end = "dog";
+        wordChain = new WordChain(start, end);
     }
 
     @Test
-    void change_whole_word_to_end_word() {
-        String start = "blaze";
-        String end = "churn";
-        char[] endChars = end.toCharArray();
+    void convert_start_word_to_end_word() {
 
-        WordChainGame game = new WordChainGame(start, end);
+        List<String> attempt = wordChain.getChain(start, end);
 
-        assertEquals(end, game.calculate());
-        System.out.println(game.getIterations());
+        assertEquals(end, attempt.get(attempt.size()));
+    }
+
+    @Test
+    void have_a_list_of_words_that_are_the_same_length_as_the_keywords() {
+        assertTrue(wordChain.getCandidates().stream().allMatch(s -> s.length() == start.length()));
     }
 }
